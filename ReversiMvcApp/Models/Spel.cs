@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace ReversiMvcApp.Models
 {
+    public enum Kleur { Geen, Wit, Zwart };
+
     public class Spel
     {
         public int id { get; set; }
