@@ -20,7 +20,7 @@ namespace ReversiMvcApp.Data
         public ReversiApiService()
         {
             httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri("https://localhost:5003/");
+            httpClient.BaseAddress = new Uri("http://localhost:5003/");
         }
 
         public List<Spel> GetAll()
