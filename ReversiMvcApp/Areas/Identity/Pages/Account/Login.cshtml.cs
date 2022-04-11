@@ -22,6 +22,7 @@ namespace ReversiMvcApp.Areas.Identity.Pages.Account
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
         private readonly ReCaptcha _captcha;
+        const string RegExInvalidCharacters = @"[^&<>\""'/]*$";
 
         public LoginModel(SignInManager<IdentityUser> signInManager, 
             ILogger<LoginModel> logger,
@@ -48,13 +49,16 @@ namespace ReversiMvcApp.Areas.Identity.Pages.Account
         {
             [Required]
             [EmailAddress]
+            [RegularExpression(RegExInvalidCharacters, ErrorMessage = "InvalidCharacters")]
             public string Email { get; set; }
 
             [Required]
             [DataType(DataType.Password)]
+            [RegularExpression(RegExInvalidCharacters, ErrorMessage = "InvalidCharacters")]
             public string Password { get; set; }
 
             [Display(Name = "Remember me?")]
+            [RegularExpression(RegExInvalidCharacters, ErrorMessage = "InvalidCharacters")]
             public bool RememberMe { get; set; }
         }
 
@@ -77,10 +81,6 @@ namespace ReversiMvcApp.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            if (!Request.Form.ContainsKey("g-recaptcha-response")) return Page();
-            var captcha = Request.Form["g-recaptcha-response"].ToString();
-            if (!await _captcha.IsValid(captcha)) return Page();
-
             returnUrl = returnUrl ?? Url.Content("~/");
 
             if (ModelState.IsValid)

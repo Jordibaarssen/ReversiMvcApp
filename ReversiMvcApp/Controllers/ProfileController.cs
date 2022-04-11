@@ -77,6 +77,11 @@ namespace ReversiMvcApp.Controllers
                     await _userManager.RemoveFromRolesAsync(user, roles.ToArray());
                     await _userManager.AddToRoleAsync(user, speler.Role);
 
+                    Speler updateSpeler = _context.Spelers.FirstOrDefault(s => s.Guid == id);
+                    updateSpeler.Role = speler.Role;
+                    _context.Update(updateSpeler);
+                    _context.SaveChanges();
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -88,7 +93,7 @@ namespace ReversiMvcApp.Controllers
             return View(speler);
         }
 
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Done(string id)
         {
             if (id == null)
             {

@@ -1,17 +1,21 @@
-﻿@model IEnumerable<ReversiMvcApp.Models.Speler>
+﻿@model IEnumerable<ReversiMvcApp.Models.Spel>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Dashboard</h1>
+<h1>Index</h1>
 
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Naam)
+                @Html.DisplayNameFor(model => model.omschrijving)
             </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -19,10 +23,10 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Naam)
+                    @Html.DisplayFor(modelItem => item.omschrijving)
                 </td>
                 <td>
-                    <a asp-action="Delete" asp-route-id="@item.Guid">Delete</a>
+                    <a asp-action="Join" asp-route-id="@item.token">Meedoen</a>
                 </td>
             </tr>
         }

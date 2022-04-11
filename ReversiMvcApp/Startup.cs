@@ -14,6 +14,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AntiXssMiddleware.Middleware;
+
 
 namespace ReversiMvcApp
 {
@@ -41,6 +43,7 @@ namespace ReversiMvcApp
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddSingleton(new ReversiApiService());
             //services.AddReCaptcha(Configuration.GetSection("ReCaptcha"));
             services.AddHttpClient<ReCaptcha>(x =>
             {
@@ -64,6 +67,15 @@ namespace ReversiMvcApp
                 app.UseHsts();
             }
 
+            app.UseAntiXssMiddleware();
+
+            app.Use(async (context, next) =>
+            {
+                context.Response.Headers.Add("X-Frame-Options", "SAMEORIGIN");
+                context.Response.Headers.Add("X-Xss-Protection", "1; mode=block");
+                await next();
+            });
+
             app.UseAuthentication();
             IdentityDataInitializer.SeedData(userManager, roleManager);
 
@@ -83,7 +95,7 @@ namespace ReversiMvcApp
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Spel}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }

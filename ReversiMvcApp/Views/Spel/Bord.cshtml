@@ -1,0 +1,62 @@
+﻿@using System.Security.Claims
+@model Spel
+
+@{
+    ViewBag.Title = "Reversi";
+    Layout = "_Layout";
+
+    ClaimsPrincipal currentUser = this.User;
+    var currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+}
+
+<div class="logo"><b>R<span>EV</span>E<span>R</span>SI</b></div>
+
+<div class="spel-details">
+    <div class="float-left">
+        <b><span>Omschrijving: @Model.omschrijving</span></b><br />
+        <b><span id="kleur"></span></b><br /><br />
+        <form asp-action="Leave" asp-route-id="@Model.token">
+            <button type="submit" class="btn btn-danger" onclick="return confirm('Weet je zeker dat je het spel wilt verlaten?')">
+                Verlaten
+            </button>
+        </form>
+    </div>
+    <div class="float-right">
+        <b><span id="aanDeBeurt"></span></b><br />
+        <b><span id="score"></span></b><br />
+    </div>
+</div>
+
+
+<div class="board"></div>
+
+<div class="spel-details fun-fact">
+    <b><span>Fun Fact: </span></b><b><span id="funFact"></span></b>
+</div>
+
+<canvas id="myChart" width="400" height="400"></canvas>
+
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+    <script src="https://unpkg.com/regenerator-runtime@0.13.1/runtime.js"></script>
+    <link rel="stylesheet" href="~/css/style.min.css">
+    <script src="~/js/vendor.js"></script>
+    <script src="~/js/templates.js"></script>
+    <script src="~/js/app.js"></script>
+    <script>
+        $(function () {
+            Game.init('@currentUserId', '@Model.token');
+        });
+    </script>
+}
+
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="svg-filter">
+    <defs>
+        <filter id="filter-chalk">
+            <feTurbulence type="turbulence" baseFrequency="0.4" numOctaves="1" result="result1" />
+            <feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="5" in="SourceGraphic" in2="result1" />
+        </filter>
+    </defs>
+</svg>
